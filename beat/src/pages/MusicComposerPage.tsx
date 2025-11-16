@@ -226,7 +226,7 @@ const MusicComposerPage = () => {
             Music Composer
           </h1>
           <p className="text-gray-700 dark:text-gray-300 text-lg">
-            Select an instrument and tap pads to create your own beat
+            ✨Select an instrument and tap pads to create your own beat.Your beat Your happiness! ✨
           </p>
         </div>
 

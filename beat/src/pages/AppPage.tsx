@@ -209,14 +209,14 @@ const AppPage: React.FC = () => {
                 <img
                   src={instrument.image}
                   onError={(e) => (e.currentTarget.src = "/placeholder.jpg")}
-                  className="absolute inset-0 w-full h-full object-cover opacity-70"
+                  className="absolute inset-0 w-full h-full object-contain opacity-70"
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent" />
+               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
                 <div className="relative z-10 flex flex-col justify-end h-full p-4 text-white">
-                  <h3 className="font-semibold truncate">{instrument.name}</h3>
-                  <p className="text-sm opacity-90 line-clamp-2">
+                  <h3 className="font-semibold truncate text-white dark:text-white">{instrument.name}</h3>
+                  <p className="text-sm opacity-90 line-clamp-2 text-white dark:text-gray-200">
                     {instrument.description}
                   </p>
 

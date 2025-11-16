@@ -191,8 +191,9 @@ const Index = () => {
           </h1>
           
           <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto animate-slide-up">
-            Discover choreography for your favorite songs across multiple dance styles. 
+           ✨Discover choreography for your favorite songs across multiple dance styles. 
             Watch, learn, and master the art of dance with personalized animations.
+            Have some fun with the quiz questions. Create your own music with different instruments and visualize the beats ✨
           </p>
           
           <Link to="/signup">
