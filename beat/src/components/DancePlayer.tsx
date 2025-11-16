@@ -171,16 +171,20 @@ export default function DancePlayer({ song, danceStyle, onClose }: Props) {
 
       {/* 3D model */}
       <div className="flex-1 mt-4">
-       <Canvas camera={{ position: [0, 2.2, 6.5], fov: 38 }}>
+       <Canvas camera={{ position: [0, 1.8, 5.5], fov: 40 }}>
       <BackgroundImage />
       <ambientLight intensity={0.7} />
       <directionalLight position={[2, 10, 5]} intensity={1.2} />
+        <group position={[0, -0.5, 0]}>
 
   <Dancer 
+  
     move={currentMove} 
     danceStyle={danceStyle} 
     isPaused={isPaused} 
   />
+     </group>
+
 </Canvas>
       </div>
 

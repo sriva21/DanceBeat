@@ -223,7 +223,26 @@ const AppPage: React.FC = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="mt-2 w-fit bg-white/40 backdrop-blur-md hover:bg-white/60"
+                    className={`
+    mt-2 w-fit backdrop-blur-md transition-all duration-300 font-semibold
+
+    ${
+      playingInstrumentId === instrument.id
+        ? `
+          /* PLAYING STATE */
+          text-white
+          bg-pink-600 hover:bg-pink-700
+
+          dark:bg-gradient-to-r dark:from-blue-600 dark:to-pink-600
+          dark:hover:from-blue-500 dark:hover:to-pink-500
+        `
+        : `
+          /* NOT PLAYING STATE */
+          bg-white/40 hover:bg-white/60
+          text-white
+        `
+    }
+  `}
                     onClick={(e) => {
                       e.stopPropagation();
 
@@ -234,6 +253,7 @@ const AppPage: React.FC = () => {
                         currentAudio?.pause();
 
                         const audio = new Audio(instrument.audio);
+                        audio.loop = true;  
                         audio.play();
 
                         setCurrentAudio(audio);
