@@ -133,7 +133,7 @@ const AppPage: React.FC = () => {
                 <Bookmark className="w-4 h-4" /> Saved
               </Button>
 
-              <Button variant="ghost" onClick={() => navigate("/favorites")}>
+              <Button variant="ghost" onClick={() => navigate("/liked")}>
                 <Heart className="w-4 h-4" /> Favorites
               </Button>
 
@@ -209,7 +209,7 @@ const AppPage: React.FC = () => {
                 <img
                   src={instrument.image}
                   onError={(e) => (e.currentTarget.src = "/placeholder.jpg")}
-                  className="absolute inset-0 w-full h-full object-contain opacity-70"
+                  className="absolute inset-0 w-full h-full object-cover opacity-70"
                 />
 
                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />

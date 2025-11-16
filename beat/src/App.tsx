@@ -11,8 +11,7 @@ import Game from "./pages/Game";
 import NotFound from "./pages/NotFound";
 import MusicComposerPage from "@/pages/MusicComposerPage";
 import SavedPage from "./pages/SavedPage";
-
-
+import LikedPage from "./pages/LikedPage";
 
 const queryClient = new QueryClient();
 
@@ -30,7 +29,7 @@ const App = () => (
           <Route path="/game" element={<Game />} />
           <Route path="/create-music" element={<MusicComposerPage />} />
           <Route path="/saved" element={<SavedPage />} />
-         
+          <Route path="/liked" element={<LikedPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

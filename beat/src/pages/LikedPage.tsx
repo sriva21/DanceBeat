@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Bookmark, Trash2 } from "lucide-react";
+import { Heart, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import songsData from "../data/songs.json";
 
-const SavedPage = () => {
+const LikedPage = () => {
   const navigate = useNavigate();
-  const [savedIds, setSavedIds] = useState<number[]>([]);
+  const [likedIds, setLikedIds] = useState<number[]>([]);
   const [songs, setSongs] = useState<any[]>([]);
 
   const imageFiles = import.meta.glob("/src/assets/images/*", { eager: true });
   const audioFiles = import.meta.glob("/src/assets/audio/*", { eager: true });
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("savedSongs") || "[]");
-    setSavedIds(saved);
+    const liked = JSON.parse(localStorage.getItem("likedSongs") || "[]");
+    setLikedIds(liked);
 
     const mapped = songsData.map((song) => ({
       ...song,
@@ -25,29 +25,29 @@ const SavedPage = () => {
     setSongs(mapped);
   }, []);
 
-  const removeSaved = (songId: number) => {
-    const updated = savedIds.filter((id) => id !== songId);
-    setSavedIds(updated);
-    localStorage.setItem("savedSongs", JSON.stringify(updated));
+  const removeLike = (songId: number) => {
+    const updated = likedIds.filter((id) => id !== songId);
+    setLikedIds(updated);
+    localStorage.setItem("likedSongs", JSON.stringify(updated));
   };
 
-  const savedSongs = songs.filter((s) => savedIds.includes(s.id));
+  const likedSongs = songs.filter((s) => likedIds.includes(s.id));
 
   return (
-    <div className="p-6 min-h-screen  bg-pink-50 dark:bg-pink-200/10">
+    <div className="p-6 min-h-screen">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold flex items-center gap-2">
-          <Bookmark className="w-7 h-7 text-pink-600" />
-          Saved Songs
+          <Heart className="w-7 h-7 text-red-500" />
+          Favourite Songs
         </h1>
         <Button onClick={() => navigate("/app")}>Back</Button>
       </div>
 
-      {savedSongs.length === 0 ? (
-        <p className="text-center text-gray-500 mt-10">No saved songs yet.</p>
+      {likedSongs.length === 0 ? (
+        <p className="text-center text-gray-500 mt-10">No favourite songs yet.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {savedSongs.map((song) => (
+          {likedSongs.map((song) => (
             <div
               key={song.id}
               className="flex items-center gap-4 p-3 bg-white/10 rounded-lg shadow-sm backdrop-blur-md hover:bg-white/20 transition"
@@ -64,7 +64,7 @@ const SavedPage = () => {
               </div>
 
               <button
-                onClick={() => removeSaved(song.id)}
+                onClick={() => removeLike(song.id)}
                 className="text-red-500 hover:text-red-600 text-sm flex items-center gap-1"
               >
                 <Trash2 className="w-4 h-4" />
@@ -78,4 +78,4 @@ const SavedPage = () => {
   );
 };
 
-export default SavedPage;
+export default LikedPage;
