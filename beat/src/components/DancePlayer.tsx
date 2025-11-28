@@ -42,11 +42,24 @@ function BackgroundImage() {
   return <primitive attach="background" object={texture} />;
 }
 
+function formatTime(sec: number) {
+  if (!sec) return "0:00";
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${m}:${s}`;
+}
+
 export default function DancePlayer({ song, danceStyle, onClose }: Props) {
   const [currentMove, setCurrentMove] = useState("idle");
   const [steps, setSteps] = useState<Step[]>([]);
   const [isPaused, setIsPaused] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [speed, setSpeed] = useState(1);
+
 
   // Load choreo
   useEffect(() => {
@@ -122,6 +135,14 @@ export default function DancePlayer({ song, danceStyle, onClose }: Props) {
       }
     };
 
+    audio.addEventListener("loadedmetadata", () => {
+    setDuration(audio.duration);
+  });
+
+  audio.addEventListener("timeupdate", () => {
+  setCurrentTime(audio.currentTime);
+});
+
     audio.addEventListener("timeupdate", updateMove);
     audio.addEventListener("ended", () => setCurrentMove("idle"));
 
@@ -189,54 +210,100 @@ export default function DancePlayer({ song, danceStyle, onClose }: Props) {
       </div>
 
       {/* Controls */}
-      <div className="w-full px-6 py-4 bg-black/60 backdrop-blur-md flex items-center justify-center gap-6 text-white">
+      {/* --- New Modern Video Player Bar --- */}
+<div className="w-full px-6 py-4 bg-black/70 backdrop-blur-xl flex flex-col gap-3 text-white">
 
-        {/* Backward */}
-        <button
-          onClick={() => {
-            if (!audioRef.current) return;
-            audioRef.current.currentTime = Math.max(
-              0,
-              audioRef.current.currentTime - 5
-            );
-          }}
-          className="text-lg"
-        >
-          ⏪ 
-        </button>
+  {/* Time Line */}
+  <div className="w-full flex items-center gap-3">
+    <span className="text-xs w-12 text-right">
+      {formatTime(currentTime)}
+    </span>
 
-        {/* Play / Pause */}
-        <button
-          onClick={() => {
-            if (!audioRef.current) return;
+    <input
+      type="range"
+      min={0}
+      max={duration || 0}
+      value={currentTime}
+      onChange={(e) => {
+        if (!audioRef.current) return;
+        audioRef.current.currentTime = Number(e.target.value);
+      }}
+      className="flex-1 accent-white [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-thumb]:rounded-full"
+    />
 
-            if (audioRef.current.paused) {
-              audioRef.current.play();
-              setIsPaused(false); // resume dancer
-            } else {
-              audioRef.current.pause();
-              setIsPaused(true); // pause dancer
-            }
-          }}
-          className="text-xl font-bold"
-        >
-           {isPaused ? "▶️" : "⏸"}
-        </button>
+    <span className="text-xs w-12">
+      {formatTime(duration)}
+    </span>
+  </div>
 
-        {/* Forward */}
-        <button
-          onClick={() => {
-            if (!audioRef.current) return;
-            audioRef.current.currentTime = Math.min(
-              audioRef.current.duration,
-              audioRef.current.currentTime + 5
-            );
-          }}
-          className="text-lg"
-        >
-           ⏩
-        </button>
-      </div>
+  {/* Controls: Play, Back, Forward, Speed */}
+  <div className="flex justify-center items-center gap-6 mt-1">
+
+    {/* Back 5 sec */}
+    <button
+      onClick={() => {
+        if (!audioRef.current) return;
+        audioRef.current.currentTime = Math.max(
+          0,
+          audioRef.current.currentTime - 5
+        );
+      }}
+      className="text-xl"
+    >
+      ⏪
+    </button>
+
+    {/* Play / Pause */}
+    <button
+      onClick={() => {
+        if (!audioRef.current) return;
+        if (audioRef.current.paused) {
+          audioRef.current.play();
+          setIsPaused(false);
+        } else {
+          audioRef.current.pause();
+          setIsPaused(true);
+        }
+      }}
+      className="text-3xl"
+    >
+      {isPaused ? "▶️" : "⏸"}
+    </button>
+
+    {/* Forward 5 sec */}
+    <button
+      onClick={() => {
+        if (!audioRef.current) return;
+        audioRef.current.currentTime = Math.min(
+          audioRef.current.duration,
+          audioRef.current.currentTime + 5
+        );
+      }}
+      className="text-xl"
+    >
+      ⏩
+    </button>
+
+    {/* Playback Speed */}
+    <select
+      value={speed}
+      onChange={(e) => {
+        const s = Number(e.target.value);
+        setSpeed(s);
+        if (audioRef.current) audioRef.current.playbackRate = s;
+      }}
+      className="bg-white/10 rounded px-2 py-1 text-sm"
+    >
+      <option value={0.5}>0.5×</option>
+      <option value={1}>1×</option>
+      <option value={1.5}>1.5×</option>
+      <option value={2}>2×</option>
+    </select>
+  </div>
+
+</div>
+
+      {/* END TIMELINE */}
     </div>
   );
 }
